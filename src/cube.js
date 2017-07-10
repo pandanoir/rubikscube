@@ -13,6 +13,29 @@
 // L F R B
 //   D
 'use strict';
+const copy = arr => arr.concat();
+const baseRotate = trans => {
+    return face => {
+        const beforeFace = copy(face);
+        const result = copy(face);
+        for (let i = 0, _i = trans.length; i < _i; i++) result[i] = trans[i];
+        return result;
+    }
+};
+const rotateRight = baseRotate([6, 3, 0, 7, 1, 8, 5, 2]);
+const rotateLeft = baseRotate([2, 5, 8, 1, 7, 0, 3, 6]);
+const rotateRight2 = baseRotate([8, 7, 6, 5, 3, 2, 1, 0]);
+const rotateLeft2 = rotateRight2;
+const setBase = (face, basePoint) => {
+    // basePoint represent the index of face
+    // for instance, if you rotate using y command, B must be same with R in index.
+    if (basePoint === 0) return copy(face);
+    else if (basePoint === 2) return rotateLeft(face);
+    else if (basePoint === 6) return rotateRight(face);
+    else if (basePoint === 8) return rotateLeft2(face);
+    else throw new Error('invalid basePoint.');
+};
+
 class Cube {
     constructor() {//{{{
         this.face = {
@@ -176,47 +199,3 @@ class Cube {
         return newCube;
     }
 };
-function rotateRight(face) {
-    var beforeFace = copy(face);
-    var result = copy(face);
-    result[0] = beforeFace[6]; result[1] = beforeFace[3];
-    result[2] = beforeFace[0]; result[3] = beforeFace[7];
-    result[5] = beforeFace[1]; result[6] = beforeFace[8];
-    result[7] = beforeFace[5]; result[8] = beforeFace[2];
-    return result;
-}
-
-function rotateLeft(face) {
-    var beforeFace = copy(face);
-    var result = copy(face);
-    result[0] = beforeFace[2]; result[1] = beforeFace[5];
-    result[2] = beforeFace[8]; result[3] = beforeFace[1];
-    result[5] = beforeFace[7]; result[6] = beforeFace[0];
-    result[7] = beforeFace[3]; result[8] = beforeFace[6];
-    return result;
-}
-function rotateRight2(face) {
-    var beforeFace = copy(face);
-    var result = copy(face);
-    result[0] = beforeFace[8]; result[1] = beforeFace[7];
-    result[2] = beforeFace[6]; result[3] = beforeFace[5];
-    result[5] = beforeFace[3]; result[6] = beforeFace[2];
-    result[7] = beforeFace[1]; result[8] = beforeFace[0];
-    return result;
-}
-function rotateLeft2(face) {
-    return rotateRight2(face);
-}
-function setBase(face, basePoint) {
-    // basePoint represent the index of face
-    var res;
-    if (basePoint === 0) res = copy(face);
-    else if (basePoint === 2) res = rotateLeft(face);
-    else if (basePoint === 6) res = rotateRight(face);
-    else if (basePoint === 8) res = rotateLeft2(face);
-    else throw new Error('invalid basePoint.');
-    return res;
-}
-function copy(arr) {
-    return arr.concat();
-}
