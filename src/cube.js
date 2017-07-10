@@ -3,15 +3,19 @@
 //            [0, 1, 2]
 //            [3, 4, 5]
 //            [6, 7, 8]
-// [0, 1, 2]  [0, 1, 2]  [0, 1, 2]  [0, 1, 2]
-// [3, 4, 5]  [3, 4, 5]  [3, 4, 5]  [3, 4, 5]
-// [6, 7, 8]  [6, 7, 8]  [6, 7, 8]  [6, 7, 8]
+// [0, 1, 2]  [0, 1, 2]  [0, 1, 2]
+// [3, 4, 5]  [3, 4, 5]  [3, 4, 5]
+// [6, 7, 8]  [6, 7, 8]  [6, 7, 8]
+//            [0, 1, 2]
+//            [3, 4, 5]
+//            [6, 7, 8]
 //            [0, 1, 2]
 //            [3, 4, 5]
 //            [6, 7, 8]
 //   U
-// L F R B
+// L F R
 //   D
+//   B
 'use strict';
 const copy = arr => arr.concat();
 const baseRotate = trans => {
@@ -37,7 +41,7 @@ const setBase = (face, basePoint) => {
 };
 
 class Cube {
-    constructor() {//{{{
+    constructor() {
         this.face = {
         };
         this.face.U = ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W']; // white
@@ -46,138 +50,88 @@ class Cube {
         this.face.L = ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']; // green
         this.face.B = ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']; // orange
         this.face.D = ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B']; // blue
-    }//}}}
-    rotate(d) {//{{{
-        if (d === 'R') {//{{{
-            var tmp = [this.face.F[2], this.face.F[5], this.face.F[8]];
-            this.face.F[2] = this.face.D[2];
-            this.face.F[5] = this.face.D[5];
-            this.face.F[8] = this.face.D[8];
+    }
+    rotate(d) {
+        const hasPrime = d.includes("'");
+        const move = (hasPrime ? d.replace("'", '') : d)
+            .replace(/\(([ruf])(2?)\)/, (_,a,two) => (a === 'r' ? 'x' : a === 'u' ? 'y' : 'z')+two); // d.slice(0, -1) cannot remove prime from "(r')".
+        if (move === 'R') {
+            const dir = ['U', 'F', 'D', 'B'];
+            if (hasPrime) dir.reverse();
 
-            this.face.D[2] = this.face.B[6];
-            this.face.D[5] = this.face.B[3];
-            this.face.D[8] = this.face.B[0];
+            const tmp = [this.face[dir[0]][2], this.face[dir[0]][5], this.face[dir[0]][8]];
+            for (let i = 0; i < 3; i++) {
+                const now = dir[i], next = dir[i + 1];
+                this.face[now][2] = this.face[next][2];
+                this.face[now][5] = this.face[next][5];
+                this.face[now][8] = this.face[next][8];
+            }
 
-            this.face.B[0] = this.face.U[8];
-            this.face.B[3] = this.face.U[5];
-            this.face.B[6] = this.face.U[2];
+            this.face[dir[3]][2] = tmp[0];
+            this.face[dir[3]][5] = tmp[1];
+            this.face[dir[3]][8] = tmp[2];
 
-            this.face.U[2] = tmp[0];
-            this.face.U[5] = tmp[1];
-            this.face.U[8] = tmp[2];
-
-            this.face.R = rotateRight(this.face.R);
+            this.face.R = (!hasPrime ? rotateRight : rotateLeft)(this.face.R);
         }
-        if (d === 'L') this.rotate('(u2)').rotate('R').rotate('(u2)');
-        if (d === "L'") this.rotate('(u2)').rotate("R'").rotate('(u2)');
-
-        if (d === 'U') this.rotate('(f)').rotate('R').rotate("(f')");
-        if (d === "U'") this.rotate('(f)').rotate("R'").rotate("(f')");
-
-        if (d === 'D') this.rotate("(f')").rotate('R').rotate('(f)');
-        if (d === "D'") this.rotate("(f')").rotate("R'").rotate('(f)');
-
-        if (d === 'F') this.rotate("(u')").rotate('R').rotate('(u)');
-        if (d === "F'") this.rotate("(u')").rotate("R'").rotate('(u)');
-
-        if (d === 'B') this.rotate('(u)').rotate('R').rotate("(u')");
-        if (d === "B'") this.rotate('(u)').rotate("B'").rotate("(u')");//}}}
-
-        if (d === 'x' || d === '(r)') {//{{{
-            var beforeU = copy(this.face.U);
-
-            this.face.U = copy(this.face.F);
-            this.face.F = copy(this.face.D);
-            this.face.D = setBase(this.face.B, 8);
-            this.face.B = setBase(beforeU, 8);
-
-            this.face.R = rotateRight(this.face.R);
-            this.face.L = rotateLeft(this.face.L);
+        if ('LUDFB'.includes(move)) {
+            const preMove = {
+                'L': ['(u2)', '(u2)'],
+                'U': ['(f)', "(f')"],
+                'D': ["(f')", '(f)'],
+                'F': ["(u')", '(u)'],
+                'B': ['(u)', "(u')"]
+            };
+            this.rotate(preMove[move][0]).rotate(!hasPrime ? 'R' : "R'").rotate(preMove[move][1]);
         }
-        if (d === "x'" || d === "(r')") {
-            var beforeU = copy(this.face.U);
-            console.log(JSON.stringify(this.face, null, '\t'));
+        const isCubeRotation = 'xyz(r)(u)(f)'.contains(move);
+        if (isCubeRotation) {
+            const dir = [...{x: 'UFDB', y: 'LFRB', z: 'ULDR'}[move]];
+            const R = {x: 'R', y: 'U', z: 'F'}[move], L = {x: 'L', y: 'D', z: 'B'}
+            if (hasPrime) dir.reverse();
 
-            this.face.U = setBase(this.face.B, 8);
-            this.face.B = setBase(this.face.D, 8);
-            this.face.D = copy(this.face.F);
-            this.face.F = beforeU;
+            const before = copy(this.face[dir[0]]);
+            for (let i = 0; i < 3; i++) this.face[dir[i]] = copy(this.face[dir[i + 1]]);
+            this.face[dir[3]] = before;
 
-            this.face.R = rotateLeft(this.face.R);
-            this.face.L = rotateRight(this.face.L);
-            console.log(JSON.stringify(this.face, null, '\t'));
+            this.face[R] = (!hasPrime ? rotateRight : rotateLeft)(this.face[R]);
+            this.face[L] = (!hasPrime ? rotateLett : rotateLeft)(this.face[L]]);
         }
-        if (d === 'x2' || d === "x'2" || d === '(r2)' || d === "(r'2)") {
-            var beforeU = copy(this.face.U);
-            var beforeF = copy(this.face.F);
+        if (move === 'y') {
+            if (!hasPrime) {
+                this.face.R = setBase(this.face.R, 8);
+                this.face.B = setBase(this.face.B, 8);
+            } else {
+                this.face.B = setBase(this.face.B, 8);
+                this.face.L = setBase(this.face.L, 8);
+            }
+        }
+        if (move === 'z') {
+            for (let i = 0; i < 4; i++) this.face[dir[i]] = setBase(this.face[dir[i]], !hasPrime ? 6 : 2);
+        }
+        if (move === 'x2') {
+            const beforeU = copy(this.face.U), beforeF = copy(this.face.F);
 
             this.face.U = copy(this.face.D);
             this.face.D = beforeU;
-            this.face.F = setBase(this.face.B, 8);
-            this.face.B = setBase(beforeF, 8);
+            this.face.F = copy(this.face.B);
+            this.face.B = beforeF;
 
             this.face.R = rotateRight2(this.face.R);
             this.face.L = rotateLeft2(this.face.L);
-        }//}}}
-        if (d === 'y' || d === '(u)') {//{{{
-            var beforeF = copy(this.face.F);
-
-            this.face.F = copy(this.face.R);
-            this.face.R = copy(this.face.B);
-            this.face.B = copy(this.face.L);
-            this.face.L = beforeF;
-
-            this.face.U = rotateRight(this.face.U);
-            this.face.D = rotateLeft(this.face.D);
         }
-        if (d === "y'" || d === "(u')") {
-            var beforeF = copy(this.face.F);
+        if (move === 'y2') {
+            const beforeF = copy(this.face.F), beforeR = copy(this.face.R);
 
-            this.face.F = copy(this.face.L);
-            this.face.L = copy(this.face.B);
-            this.face.B = copy(this.face.R);
-            this.face.R = beforeF;
-
-            this.face.U = rotateLeft(this.face.U);
-            this.face.D = rotateRight(this.face.D);
-        }
-        if (d === 'y2' || d === "y'2" || d === '(u2)' || d === "(u'2)") {
-            var beforeF = copy(this.face.F);
-            var beforeR = copy(this.face.R);
-
-            this.face.F = copy(this.face.B);
+            this.face.F = setBase(this.face.B, 8);
+            this.face.B = setBase(beforeF, 8);
             this.face.R = copy(this.face.L);
-            this.face.B = beforeF;
             this.face.L = beforeR;
 
             this.face.U = rotateRight2(this.face.U);
             this.face.D = rotateLeft2(this.face.D);
-        }//}}}
-        if (d === 'z' || d === '(f)') {//{{{
-            var beforeU = copy(this.face.U);
-
-            this.face.U = setBase(this.face.L, 6);
-            this.face.L = setBase(this.face.D, 6);
-            this.face.D = setBase(this.face.R, 6);
-            this.face.R = setBase(beforeU, 6);
-
-            this.face.F = rotateRight(this.face.F);
-            this.face.B = rotateLeft(this.face.B);
         }
-        if (d === "z'" || d === "(f')") {
-            var beforeU = copy(this.face.U);
-
-            this.face.U = setBase(this.face.R, 2);
-            this.face.R = setBase(this.face.D, 2);
-            this.face.D = setBase(this.face.L, 2);
-            this.face.L = setBase(beforeU, 2);
-
-            this.face.F = rotateLeft(this.face.F);
-            this.face.B = rotateRight(this.face.B);
-        }
-        if (d === 'z2' || d === "z'2" || d === '(f2)' || d === "(f'2)") {
-            var beforeU = copy(this.face.U);
-            var beforeL = copy(this.face.L);
+        if (move === 'z2') {
+            const beforeU = copy(this.face.U), beforeL = copy(this.face.L);
 
             this.face.U = copy(this.face.D);
             this.face.D = beforeU;
@@ -186,9 +140,9 @@ class Cube {
 
             this.face.F = rotateRight2(this.face.F);
             this.face.B = rotateLeft2(this.face.B);
-        }//}}}
+        }
         return this;
-    }//}}}
+    }
     copy() {
         var faces = {};
         for (var key in this.face) {
