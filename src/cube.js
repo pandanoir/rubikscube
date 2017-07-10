@@ -144,11 +144,11 @@ class Cube {
         return this;
     }
     copy() {
-        var faces = {};
-        for (var key in this.face) {
+        const faces = {};
+        for (const key in this.face) {
             faces[key] = copy(this.face[key]);
         }
-        var newCube = new Cube();
+        const newCube = new Cube();
         newCube.face = faces;
         return newCube;
     }
