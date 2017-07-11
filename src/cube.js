@@ -46,24 +46,25 @@ export default class Cube {
     }
     rotate(d) {
         const hasPrime = d.includes("'");
-        const move = (hasPrime ? d.replace("'", '') : d)
-            .replace(/\(([ruf])(2?)\)/, (_,a,two) => (a === 'r' ? 'x' : a === 'u' ? 'y' : 'z')+two); // d.slice(0, -1) cannot remove prime from "(r')".
+        const isTwice = d.includes('2');
+        const move = d.replace(/['2]/g, '')
+            .replace(/\(([ruf])\)/, (_,a) => (a === 'r' ? 'x' : a === 'u' ? 'y' : 'z')); // d.slice(0, -1) cannot remove prime from "(r')".
         const isCubeRotation = 'xyz'.includes(move);
+        if (isTwice) {
+            this.rotate(move + hasPrime ? "'" : '');
+            this.rotate(move + hasPrime ? "'" : '');
+            return this;
+        }
         if (move === 'R') {
-            const dir = ['U', 'F', 'D', 'B'];
+            const dir = [...'UFDB'];
             if (hasPrime) dir.reverse();
 
             const tmp = [this.face[dir[0]][2], this.face[dir[0]][5], this.face[dir[0]][8]];
             for (let i = 0; i < 3; i++) {
-                const now = dir[i], next = dir[i + 1];
-                this.face[now][2] = this.face[next][2];
-                this.face[now][5] = this.face[next][5];
-                this.face[now][8] = this.face[next][8];
+                const now = this.face[dir[i]], next = this.face[dir[i + 1]];
+                now[2] = next[2]; now[5] = next[5]; now[8] = next[8];
             }
-
-            this.face[dir[3]][2] = tmp[0];
-            this.face[dir[3]][5] = tmp[1];
-            this.face[dir[3]][8] = tmp[2];
+            [this.face[dir[3]][2], this.face[dir[3]][5], this.face[dir[3]][8]] = tmp;
 
             this.face.R = (!hasPrime ? rotateRight : rotateLeft)(this.face.R);
         } else if ('LUDFB'.includes(move)) {
@@ -75,7 +76,7 @@ export default class Cube {
                 'B': ['(u)', "(u')"]
             }[move];
             this.rotate(preMove[0])
-                .rotate(!hasPrime ? 'R' : "R'")
+                .rotate(`R${hasPrime ? "'" : ''}`)
                 .rotate(preMove[1]);
         } else if (isCubeRotation) {
             const dir = [...{x: 'UFDB', y: 'LFRB', z: 'ULDR'}[move]];
@@ -100,36 +101,6 @@ export default class Cube {
             if (move === 'z') {
                 for (let i = 0; i < 4; i++) this.face[dir[i]] = setBase(this.face[dir[i]], !hasPrime ? 6 : 2);
             }
-        } else if (move === 'x2') {
-            const beforeU = copy(this.face.U), beforeF = copy(this.face.F);
-
-            this.face.U = copy(this.face.D);
-            this.face.D = beforeU;
-            this.face.F = copy(this.face.B);
-            this.face.B = beforeF;
-
-            this.face.R = rotateRight2(this.face.R);
-            this.face.L = rotateLeft2(this.face.L);
-        } else if (move === 'y2') {
-            const beforeF = copy(this.face.F), beforeR = copy(this.face.R);
-
-            this.face.F = setBase(this.face.B, 8);
-            this.face.B = setBase(beforeF, 8);
-            this.face.R = copy(this.face.L);
-            this.face.L = beforeR;
-
-            this.face.U = rotateRight2(this.face.U);
-            this.face.D = rotateLeft2(this.face.D);
-        } else if (move === 'z2') {
-            const beforeU = copy(this.face.U), beforeL = copy(this.face.L);
-
-            this.face.U = copy(this.face.D);
-            this.face.D = beforeU;
-            this.face.L = copy(this.face.R);
-            this.face.R = beforeL;
-
-            this.face.F = rotateRight2(this.face.F);
-            this.face.B = rotateLeft2(this.face.B);
         }
         return this;
     }
