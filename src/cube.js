@@ -78,6 +78,21 @@ export default class Cube {
             this.rotate(preMove[0])
                 .rotate(`R${hasPrime ? "'" : ''}`)
                 .rotate(preMove[1]);
+        } else if ('MSE'.includes(move)) {
+            if (move === 'S') this.rotate('(u)');
+            if (move === 'E') this.rotate('(f)');
+            const dir = [...'BDFU'];
+            if (hasPrime) dir.reverse();
+
+            const tmp = [this.face[dir[0]][1], this.face[dir[0]][4], this.face[dir[0]][7]];
+            for (let i = 0; i < 3; i++) {
+                const now = this.face[dir[i]], next = this.face[dir[i + 1]];
+                now[1] = next[1]; now[4] = next[4]; now[7] = next[7];
+            }
+            [this.face[dir[3]][1], this.face[dir[3]][4], this.face[dir[3]][7]] = tmp;
+
+            if (move === 'S') this.rotate("(u')");
+            if (move === 'E') this.rotate("(f')");
         } else if (isCubeRotation) {
             const dir = [...{x: 'UFDB', y: 'LFRB', z: 'ULDR'}[move]];
             const R = {x: 'R', y: 'U', z: 'F'}[move], L = {x: 'L', y: 'D', z: 'B'}[move];
