@@ -33,7 +33,6 @@ const setBase = (face, basePoint) => {
     else throw new Error('invalid basePoint.');
 };
 
-class Cube {
     constructor() {
         this.face = {
             U: ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // white
@@ -42,6 +41,7 @@ class Cube {
             L: ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // green
             B: ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // orange
             D: ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'] // blue
+export default class Cube {
         };
     }
     rotate(d) {

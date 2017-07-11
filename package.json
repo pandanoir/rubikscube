@@ -2,10 +2,14 @@
   "name": "rubikscube",
   "version": "0.0.1",
   "description": "simulating Rubik's Cube in JavaScript",
-  "main": "cube.js",
+  "main": "dist/cube.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d lib"
+    "preversion": "npm test",
+    "version": "npm run build && gulp && git add -A",
+    "postversion": "git push && git push --tags",
+    "pretest": "npm run build",
+    "test": "mocha -R spec",
+    "build": "rollup src/cube.js -c -o dist/cube.js --name Cube"
   },
   "repository": {
     "type": "git",
@@ -18,10 +22,7 @@
   },
   "homepage": "https://github.com/pandanoir/rubikscube#readme",
   "devDependencies": {
-    "babel-cli": "^6.4.0",
-    "babel-plugin-syntax-class-properties": "^6.3.13",
-    "babel-plugin-transform-es2015-block-scoping": "^6.4.0",
-    "babel-plugin-transform-es2015-classes": "^6.4.0",
-    "gulp-babel": "^6.1.1"
+    "mocha": "3.4.2",
+    "rollup": "0.45.1"
   }
 }
