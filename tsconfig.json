@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "lib": ["es6", "dom", "es2017"],
+        "target": "es2017",
+        "declaration": false,
+        "noImplicitAny": true,
+        "strict": true,
+    }
+}

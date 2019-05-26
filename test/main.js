@@ -13,7 +13,7 @@
 // R [ 6, 3, 0, 7, 4, 1, 8, 5, 2 ]
 // L [ 2, 5, 8, 1, 4, 7, 0, 3, 6 ]
 const assert = require('assert');
-const Cube = require('../dist/cube.js');
+const Cube = require('../dist/cube.js').default;
 describe('Cube', () => {
     describe('#rotate()', () => {
         let cube;
