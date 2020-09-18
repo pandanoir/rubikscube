@@ -223,10 +223,10 @@ export default class Cube {
     face: CubeType = {
       U: ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'], // white
       F: ['R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R'], // red
-      R: ['Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y'], // yellow
+      R: ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'], // blue
       L: ['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G'], // green
       B: ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'], // orange
-      D: ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'], // blue
+      D: ['Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y'], // yellow
     }
   ) {
     this.face = face;
