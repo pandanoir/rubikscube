@@ -42,10 +42,12 @@ export type ReverseRotation =
   | "M'"
   | "S'"
   | "E'";
+export type WideRotation = 'Rw' | 'Lw' | 'Uw' | 'Dw' | 'Fw' | 'Bw';
 type Rotation =
   | BasicRotation
   | SquaredRotation
-  | ReverseRotation;
+  | ReverseRotation
+  | WideRotation;
 
 export type Noop = '';
 export type Direction = Reorientation | Rotation | Noop;

@@ -54,6 +54,18 @@ const isBasicReverseRotation = (dir: Direction): dir is ReverseRotation => {
     return true;
   return false;
 };
+export const isBasicWideRotation = (dir: Direction): dir is WideRotation => {
+  if (
+    dir === 'Rw' ||
+    dir === 'Lw' ||
+    dir === 'Uw' ||
+    dir === 'Dw' ||
+    dir === 'Fw' ||
+    dir === 'Bw'
+  )
+    return true;
+  return false;
+};
 const isBasicReorientation = (dir: Direction): dir is BasicReorientation => {
   if (
     dir === 'x' ||

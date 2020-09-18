@@ -4,8 +4,9 @@ import {
   reverseDirection,
   baseRotate,
   moveColumn,
+  isBasicWideRotation,
 } from './utils';
-import { Direction, CubeType, Face, Color } from './type';
+import { Direction, CubeType, Face } from './type';
 
 const rotateRight = baseRotate([6, 3, 0, 7, 4, 1, 8, 5, 2]);
 const rotateLeft = baseRotate([2, 5, 8, 1, 4, 7, 0, 3, 6]);
@@ -75,7 +76,7 @@ export default class Cube {
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
-      const reorientation: Direction = ({
+      const reorientation = ({
         M: '',
         S: 'y',
         E: 'z',
@@ -129,7 +130,29 @@ export default class Cube {
       }
       return this;
     }
-    throw new Error('unexpected rotation letter.');
+    if (isBasicWideRotation(move)) {
+      let rotations: Direction[] = [];
+      if (move === 'Rw') {
+        rotations = ['L', '(r)'];
+      } else if (move === 'Lw') {
+        rotations = ['R', "(r')"];
+      } else if (move === 'Uw') {
+        rotations = ['D', '(u)'];
+      } else if (move === 'Dw') {
+        rotations = ['U', "(u')"];
+      } else if (move === 'Fw') {
+        rotations = ['B', '(f)'];
+      } else if (move === 'Bw') {
+        rotations = ['F', "(f')"];
+      }
+      if (isReverseRotation) {
+        rotations = rotations.map((rot) => reverseDirection(rot));
+      }
+      this.rotate(...rotations);
+
+      return this;
+    }
+    return this;
   }
   /**
    * @description
