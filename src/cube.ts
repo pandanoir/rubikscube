@@ -144,10 +144,7 @@ export default class Cube {
     }
     if (move === 'R') {
       // R rotation
-      const faceOrder: Face[] = ['U', 'F', 'D', 'B'];
-      if (doesReverseRotate) faceOrder.reverse();
-
-      this.swapCube([2, 5, 8], faceOrder);
+      this.moveColumn([2, 5, 8], doesReverseRotate);
 
       if (doesReverseRotate) {
         this.face.R = rotateLeft(this.face.R);
@@ -163,12 +160,9 @@ export default class Cube {
         S: 'y',
         E: 'z',
       } as const)[move];
-      const faceOrder: Face[] = ['B', 'D', 'F', 'U'];
-      if (doesReverseRotate) faceOrder.reverse();
-
       if (reorientation) this.rotate(reorientation);
 
-      this.swapCube([1, 4, 7], faceOrder);
+      this.moveColumn([1, 4, 7], !doesReverseRotate);
 
       if (reorientation) this.rotate(`${reorientation}'` as Direction);
       return this;
@@ -219,7 +213,10 @@ export default class Cube {
     }
     throw new Error('unexpected rotation letter.');
   }
-  swapCube(position: number[], faceOrder: Face[]) {
+  private moveColumn(position: number[], isUpward: boolean): void {
+    const faceOrder = isUpward
+      ? (['B', 'D', 'F', 'U'] as const)
+      : (['U', 'F', 'D', 'B'] as const);
     const firstFace = this.face[faceOrder[0]];
     const tmp: Color[] = [];
     for (const pos of position) tmp.push(firstFace[pos]);
