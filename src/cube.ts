@@ -37,7 +37,6 @@ const rev = (dir: Direction): Direction => {
   return dir;
 };
 
-const copyFace = (face: CubeFace): CubeFace => face.concat();
 const baseRotate: (transform: number[]) => (face: CubeFace) => CubeFace = (
   transform
 ) => (face) => transform.map((x) => face[x]);
@@ -80,7 +79,7 @@ const rotateLeft2: (face: CubeFace) => CubeFace = rotateRight2;
 const setBase = (face: CubeFace, basePoint: number): CubeFace => {
   // basePoint represent the index of face
   // for instance, if you rotate using y command, B must be same with R in index.
-  if (basePoint === 0) return copyFace(face);
+  if (basePoint === 0) return copy(face);
   if (basePoint === 2) return rotateLeft(face);
   if (basePoint === 6) return rotateRight(face);
   if (basePoint === 8) return rotateLeft2(face);
@@ -183,9 +182,9 @@ export default class Cube {
 
       if (isReverseRotation) faceOrder.reverse();
 
-      const before = copyFace(this.face[faceOrder[0]]);
+      const before = copy(this.face[faceOrder[0]]);
       for (let i = 0; i < 3; i++)
-        this.face[faceOrder[i]] = copyFace(this.face[faceOrder[i + 1]]);
+        this.face[faceOrder[i]] = copy(this.face[faceOrder[i + 1]]);
       this.face[faceOrder[3]] = before;
 
       if (isReverseRotation) {
