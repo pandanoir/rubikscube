@@ -128,12 +128,9 @@ export default class Cube {
     if (move === 'R') {
       // R rotation
       this.moveColumn([2, 5, 8], isReverseRotation);
-
-      if (isReverseRotation) {
-        this.face.R = rotateLeft(this.face.R);
-        return this;
-      }
-      this.face.R = rotateRight(this.face.R);
+      this.face.R = isReverseRotation
+        ? rotateLeft(this.face.R)
+        : rotateRight(this.face.R);
       return this;
     }
     if (
