@@ -51,5 +51,5 @@ type Rotation =
   | "M'"
   | "S'"
   | "E'";
-export type Direction = Reorientation | Rotation;
-
+export type Noop = '';
+export type Direction = Reorientation | Rotation | Noop;

@@ -103,6 +103,9 @@ export default class Cube {
   }
   rotate(..._direction: Direction[]): this {
     for (const dir of _direction) {
+      if (dir === '') {
+        continue;
+      }
       this._rotate(dir);
     }
     return this;
@@ -155,16 +158,14 @@ export default class Cube {
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
-      const reorientation: Direction | null = ({
-        M: null,
+      const reorientation: Direction = ({
+        M: '',
         S: 'y',
         E: 'z',
       } as const)[move];
-      if (reorientation) this.rotate(reorientation);
-
+      this.rotate(reorientation);
       this.moveColumn([1, 4, 7], !isReverseRotation);
-
-      if (reorientation) this.rotate(`${reorientation}'` as Direction);
+      this.rotate(rev(reorientation));
       return this;
     }
     if (move === 'x' || move === 'y' || move === 'z') {
