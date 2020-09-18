@@ -1,20 +1,6 @@
-// Cube has six faces.
-// Structure which represents cube.
-//            [0, 1, 2]
-//            [3, 4, 5]
-//            [6, 7, 8]
-// [0, 1, 2]  [0, 1, 2]  [0, 1, 2]
-// [3, 4, 5]  [3, 4, 5]  [3, 4, 5]
-// [6, 7, 8]  [6, 7, 8]  [6, 7, 8]
-//            [0, 1, 2]
-//            [3, 4, 5]
-//            [6, 7, 8]
-//            [0, 1, 2]
-//            [3, 4, 5]
-//            [6, 7, 8]
-//   U
-// L F R
-//   D
+import {
+  copy,
+} from './utils';
 
 import { Direction, CubeFace, CubeType, Face, Color } from "./type";
 
@@ -254,12 +240,19 @@ export default class Cube {
     const lastFace = this.face[faceOrder[faceOrder.length - 1]];
     for (const pos of position) lastFace[pos] = tmp[pos];
   }
-  copy() {
-    const faces = {} as CubeType;
-    // for (const key of (Object.keys(this.face) as Array<keyof CubeType>))
-    //     faces[key] = copyFace(this.face[key]);
-    for (const key of ['U', 'F', 'R', 'L', 'B', 'D'] as Face[])
-      faces[key] = copyFace(this.face[key]);
+  /**
+   * @description
+   * Copy this cube.
+   */
+  copy(): Cube {
+    const faces = {
+      U: copy(this.face.U),
+      F: copy(this.face.F),
+      R: copy(this.face.R),
+      L: copy(this.face.L),
+      B: copy(this.face.B),
+      D: copy(this.face.D),
+    };
 
     const newCube = new Cube();
     newCube.face = faces;
