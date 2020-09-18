@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "description": "simulating Rubik's Cube in JavaScript",
   "main": "dist/cube.js",
+  "types": "dist/cube.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package-lock.json",
+    "package.json"
+  ],
   "scripts": {
     "preversion": "npm test",
     "version": "npm run build && gulp && git add -A",
