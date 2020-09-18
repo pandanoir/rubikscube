@@ -110,7 +110,7 @@ export default class Cube {
     return this;
   }
   private _rotate(direction: Direction): this {
-    const isReverseRotation: boolean = direction.includes("'");
+    const isReverseRotation = direction.includes("'");
     const move = direction.replace(/['2]/g, '').replace(
       /\(([ruf])\)/,
       (_, a) =>
@@ -123,6 +123,17 @@ export default class Cube {
     if (direction.includes('2')) {
       this.rotate(move);
       this.rotate(move);
+      return this;
+    }
+    if (move === 'R') {
+      // R rotation
+      this.moveColumn([2, 5, 8], isReverseRotation);
+
+      if (isReverseRotation) {
+        this.face.R = rotateLeft(this.face.R);
+        return this;
+      }
+      this.face.R = rotateRight(this.face.R);
       return this;
     }
     if (
@@ -143,17 +154,6 @@ export default class Cube {
       return this.rotate(reorientation)
         .rotate(isReverseRotation ? `R'` : 'R')
         .rotate(rev(reorientation));
-    }
-    if (move === 'R') {
-      // R rotation
-      this.moveColumn([2, 5, 8], isReverseRotation);
-
-      if (isReverseRotation) {
-        this.face.R = rotateLeft(this.face.R);
-        return this;
-      }
-      this.face.R = rotateRight(this.face.R);
-      return this;
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
