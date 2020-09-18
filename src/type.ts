@@ -1,12 +1,8 @@
-export type Color = 'W' | 'R' | 'Y' | 'G' | 'O' | 'B';
+export type Color = string;
 export type CubeFace = Color[];
+export type Face = 'U' | 'F' | 'R' | 'L' | 'B' | 'D';
 export type CubeType = {
-  U: CubeFace;
-  F: CubeFace;
-  R: CubeFace;
-  L: CubeFace;
-  B: CubeFace;
-  D: CubeFace;
+  [key in Face]: CubeFace;
 };
 // type Face = 'U' | 'F' | 'R' | 'L' | 'B' | 'D';
 export type Face = keyof CubeType;
