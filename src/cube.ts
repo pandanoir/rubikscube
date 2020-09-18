@@ -3,7 +3,7 @@ import { copy } from './utils';
 import { Direction, CubeFace, CubeType, Face, Color } from './type';
 
 //   B
-const rev = (dir: Direction): Direction => {
+const reverseDirection = (dir: Direction): Direction => {
   if (dir === 'R') return `R'`;
   if (dir === 'L') return `L'`;
   if (dir === 'U') return `U'`;
@@ -150,7 +150,7 @@ export default class Cube {
       } as const)[move];
       return this.rotate(reorientation)
         .rotate(isReverseRotation ? `R'` : 'R')
-        .rotate(rev(reorientation));
+        .rotate(reverseDirection(reorientation));
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
@@ -161,7 +161,7 @@ export default class Cube {
       } as const)[move];
       this.rotate(reorientation);
       this.moveColumn([1, 4, 7], !isReverseRotation);
-      this.rotate(rev(reorientation));
+      this.rotate(reverseDirection(reorientation));
       return this;
     }
     if (move === 'x' || move === 'y' || move === 'z') {
