@@ -168,24 +168,22 @@ export default class Cube {
       return this;
     }
     if (move === 'x' || move === 'y' || move === 'z') {
-      const faceOrder: Face[] = ({
-        x: ['U', 'F', 'D', 'B'],
-        y: ['L', 'F', 'R', 'B'],
-        z: ['U', 'L', 'D', 'R'],
-      } as { [P in 'x' | 'y' | 'z']: Face[] })[move];
-      const R: Face = ({ x: 'R', y: 'U', z: 'F' } as {
-          [P in 'x' | 'y' | 'z']: Face;
-        })[move],
-        L: Face = ({ x: 'L', y: 'D', z: 'B' } as {
-          [P in 'x' | 'y' | 'z']: Face;
-        })[move];
+      const faceOrder: Face[] = {
+        x: ['U', 'F', 'D', 'B'] as Face[],
+        y: ['L', 'F', 'R', 'B'] as Face[],
+        z: ['U', 'L', 'D', 'R'] as Face[],
+      }[move];
+      if (isReverseRotation) {
+        faceOrder.reverse();
+      }
+      const R = ({ x: 'R', y: 'U', z: 'F' } as const)[move],
+        L = ({ x: 'L', y: 'D', z: 'B' } as const)[move];
 
-      if (isReverseRotation) faceOrder.reverse();
-
-      const before = copy(this.face[faceOrder[0]]);
-      for (let i = 0; i < 3; i++)
+      const firstFace = copy(this.face[faceOrder[0]]);
+      for (let i = 0; i < 3; i++) {
         this.face[faceOrder[i]] = copy(this.face[faceOrder[i + 1]]);
-      this.face[faceOrder[3]] = before;
+      }
+      this.face[faceOrder[3]] = firstFace;
 
       if (isReverseRotation) {
         this.face[R] = rotateLeft(this.face[R]);
