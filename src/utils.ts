@@ -51,3 +51,29 @@ export const setBase = (face: CubeFace, basePoint: number): CubeFace => {
   if (basePoint === 8) return rotateLeft2(face);
   throw new Error('invalid basePoint.');
 };
+/**
+ * @description
+ * Move the face column to the next face.
+ */
+const keys = <T>(obj: T) => Object.keys(obj) as (keyof T)[];
+
+export const moveColumn = (
+  face: CubeType,
+  position: number[],
+  isUpward: boolean
+): CubeType => {
+  const newFace = Object.assign({}, face);
+  for (const key of keys(newFace)) {
+    newFace[key] = newFace[key].concat();
+  }
+  const faceOrder = isUpward
+    ? (['B', 'D', 'F', 'U'] as const)
+    : (['U', 'F', 'D', 'B'] as const);
+  for (let i = 0; i < faceOrder.length; i++) {
+    for (const pos of position) {
+      newFace[faceOrder[i]][pos] =
+        face[faceOrder[(i + 1) % faceOrder.length]][pos];
+    }
+  }
+  return newFace;
+};

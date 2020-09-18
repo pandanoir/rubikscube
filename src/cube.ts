@@ -1,4 +1,4 @@
-import { copy, setBase, reverseDirection, baseRotate } from './utils';
+import { copy, setBase, reverseDirection, baseRotate, moveColumn } from './utils';
 import { Direction, CubeType, Face, Color } from './type';
 
 const rotateRight = baseRotate([6, 3, 0, 7, 4, 1, 8, 5, 2]);
@@ -45,7 +45,7 @@ export default class Cube {
     }
     if (move === 'R') {
       // R rotation
-      this.moveColumn([2, 5, 8], isReverseRotation);
+      this.face = moveColumn(this.face, [2, 5, 8], isReverseRotation);
       this.face.R = isReverseRotation
         ? rotateLeft(this.face.R)
         : rotateRight(this.face.R);
@@ -78,7 +78,7 @@ export default class Cube {
         E: 'z',
       } as const)[move];
       this.rotate(reorientation);
-      this.moveColumn([1, 4, 7], !isReverseRotation);
+      this.face = moveColumn(this.face, [1, 4, 7], !isReverseRotation);
       this.rotate(reverseDirection(reorientation));
       return this;
     }
@@ -127,24 +127,6 @@ export default class Cube {
       return this;
     }
     throw new Error('unexpected rotation letter.');
-  }
-  private moveColumn(position: number[], isUpward: boolean): void {
-    const faceOrder = isUpward
-      ? (['B', 'D', 'F', 'U'] as const)
-      : (['U', 'F', 'D', 'B'] as const);
-    const firstFace = this.face[faceOrder[0]];
-    const tmp: Color[] = [];
-    for (const pos of position) tmp.push(firstFace[pos]);
-
-    for (let i = 0, _i = faceOrder.length; i + 1 < _i; i++) {
-      const now = this.face[faceOrder[i]],
-        next = this.face[faceOrder[i + 1]];
-
-      for (const pos of position) now[pos] = next[pos];
-    }
-
-    const lastFace = this.face[faceOrder[faceOrder.length - 1]];
-    for (const pos of position) lastFace[pos] = tmp[pos];
   }
   /**
    * @description
