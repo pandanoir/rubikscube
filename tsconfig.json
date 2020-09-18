@@ -1,9 +1,11 @@
 {
-    "compilerOptions": {
-        "lib": ["es6", "dom", "es2017"],
-        "target": "es2017",
-        "declaration": false,
-        "noImplicitAny": true,
-        "strict": true,
-    }
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "target": "ES5",
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src"]
 }
