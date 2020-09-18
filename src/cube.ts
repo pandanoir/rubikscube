@@ -1,47 +1,38 @@
-import {
-  copy,
-} from './utils';
+import { copy } from './utils';
 
-import { Direction, CubeFace, CubeType, Face, Color } from "./type";
+import { Direction, CubeFace, CubeType, Face, Color } from './type';
 
 //   B
 const rev = (dir: Direction): Direction => {
-  const { R, L, U, D, F, B } = Direction;
-  const { R_rev, L_rev, U_rev, D_rev, F_rev, B_rev } = Direction;
-  if (dir === R) return R_rev;
-  if (dir === L) return L_rev;
-  if (dir === U) return U_rev;
-  if (dir === D) return D_rev;
-  if (dir === F) return F_rev;
-  if (dir === B) return B_rev;
+  if (dir === 'R') return `R'`;
+  if (dir === 'L') return `L'`;
+  if (dir === 'U') return `U'`;
+  if (dir === 'D') return `D'`;
+  if (dir === 'F') return `F'`;
+  if (dir === 'B') return `B'`;
 
-  if (dir === R_rev) return R;
-  if (dir === L_rev) return L;
-  if (dir === U_rev) return U;
-  if (dir === D_rev) return D;
-  if (dir === F_rev) return F;
-  if (dir === B_rev) return B;
+  if (dir === `R'`) return 'R';
+  if (dir === `L'`) return 'L';
+  if (dir === `U'`) return 'U';
+  if (dir === `D'`) return 'D';
+  if (dir === `F'`) return 'F';
+  if (dir === `B'`) return 'B';
 
-  const { M, S, E } = Direction;
-  const { M_rev, S_rev, E_rev } = Direction;
-  if (dir === M) return M_rev;
-  if (dir === S) return S_rev;
-  if (dir === E) return E_rev;
+  if (dir === 'M') return `M'`;
+  if (dir === 'S') return `S'`;
+  if (dir === 'E') return `E'`;
 
-  if (dir === M_rev) return M;
-  if (dir === S_rev) return S;
-  if (dir === E_rev) return E;
-  if ([M_rev, S_rev, E_rev].includes(dir)) return dir;
+  if (dir === `M'`) return 'M';
+  if (dir === `S'`) return 'S';
+  if (dir === `E'`) return 'E';
 
-  const { x, y, z } = Direction;
-  const { x_rev, y_rev, z_rev } = Direction;
-  if (dir === x) return x_rev;
-  if (dir === y) return y_rev;
-  if (dir === z) return z_rev;
+  if (dir === 'x') return `x'`;
+  if (dir === 'y') return `y'`;
+  if (dir === 'z') return `z'`;
 
-  if (dir === x_rev) return x;
-  if (dir === y_rev) return y;
-  if (dir === z_rev) return z;
+  if (dir === `x'`) return 'x';
+  if (dir === `y'`) return 'y';
+  if (dir === `z'`) return 'z';
   // M2とかR2
   return dir;
 };
@@ -116,12 +107,9 @@ export default class Cube {
       /\(([ruf])\)/,
       (_, a) =>
         ({
-          // [Direction.r]: Direction.x,
-          // [Direction.u]: Direction.y,
-          // [Direction.f]: Direction.z,
-          r: Direction.x,
-          u: Direction.y,
-          f: Direction.z,
+          r: 'x',
+          u: 'y',
+          f: 'z',
         }[a as 'r' | 'u' | 'f'])
     ) as Direction; // d.slice(0, -1) cannot remove prime from "(r')".
     if (direction.includes('2')) {
@@ -137,15 +125,15 @@ export default class Cube {
       move === 'B'
     ) {
       // this rotation is implemented by reorientating cube and R rotating
-      const reorientation = {
-        [Direction.L]: Direction.u2,
-        [Direction.U]: Direction.f,
-        [Direction.D]: rev(Direction.f),
-        [Direction.F]: rev(Direction.u),
-        [Direction.B]: Direction.u,
-      }[move];
+      const reorientation = ({
+        L: '(u2)',
+        U: '(f)',
+        D: `(f')`,
+        F: `(u')`,
+        B: '(u)',
+      } as const)[move];
       return this.rotate(reorientation)
-        .rotate(doesReverseRotate ? Direction.R_rev : Direction.R)
+        .rotate(doesReverseRotate ? `R'` : 'R')
         .rotate(rev(reorientation));
     }
     if (move === 'R') {
@@ -164,11 +152,11 @@ export default class Cube {
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
-      const reorientation: Direction | null = {
+      const reorientation: Direction | null = ({
         M: null,
-        S: Direction.y,
-        E: Direction.z,
-      }[move];
+        S: 'y',
+        E: 'z',
+      } as const)[move];
       const faceOrder: Face[] = ['B', 'D', 'F', 'U'];
       if (doesReverseRotate) faceOrder.reverse();
 
