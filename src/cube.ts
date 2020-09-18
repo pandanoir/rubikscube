@@ -1,16 +1,45 @@
 import {
-  copy,
-  setBase,
-  reverseDirection,
+  BasicRotation,
+  CubeType,
+  Direction,
+  Face,
+  NormalizedDirection,
+  WideRotation,
+} from './type';
+import {
   baseRotate,
-  moveColumn,
+  copy,
   isBasicWideRotation,
+  moveColumn,
+  normalize,
+  reverseDirection,
+  setBase,
 } from './utils';
-import { Direction, CubeType, Face } from './type';
 
 const rotateRight = baseRotate([6, 3, 0, 7, 4, 1, 8, 5, 2]);
 const rotateLeft = baseRotate([2, 5, 8, 1, 4, 7, 0, 3, 6]);
 
+/**
+ * @description
+ * Cube has six faces.
+ * Structure which represents cube.
+ *            [0, 1, 2]
+ *            [3, 4, 5]
+ *            [6, 7, 8]
+ * [0, 1, 2]  [0, 1, 2]  [0, 1, 2]
+ * [3, 4, 5]  [3, 4, 5]  [3, 4, 5]
+ * [6, 7, 8]  [6, 7, 8]  [6, 7, 8]
+ *            [0, 1, 2]
+ *            [3, 4, 5]
+ *            [6, 7, 8]
+ *            [0, 1, 2]
+ *            [3, 4, 5]
+ *            [6, 7, 8]
+ *   U
+ * L F R
+ *   D
+ *   B
+ */
 export default class Cube {
   public face: CubeType;
   constructor(
@@ -27,21 +56,22 @@ export default class Cube {
   }
   rotate(..._direction: Direction[]): this {
     for (const dir of _direction) {
-      if (dir === '') {
+      const normalized = normalize(dir);
+      if (normalized === '') {
         continue;
       }
-      this._rotate(dir);
+      this._rotate(normalized);
     }
     return this;
   }
-  private _rotate(direction: Direction): this {
+  private _rotate(direction: NormalizedDirection): this {
     const isReverseRotation = direction.includes("'");
     const move = direction
       .replace(/['2]/g, '')
       .replace(
         /\(([ruf])\)/,
         (_, a: 'r' | 'u' | 'f') => ({ r: 'x', u: 'y', f: 'z' }[a])
-      ) as Direction; // d.slice(0, -1) cannot remove prime from "(r')".
+      ) as BasicRotation | 'x' | 'y' | 'z' | WideRotation;
     if (direction.includes('2')) {
       this.rotate(move);
       this.rotate(move);
@@ -62,7 +92,7 @@ export default class Cube {
       move === 'F' ||
       move === 'B'
     ) {
-      // this rotation is implemented by reorientating cube and R rotating
+      // These rotations other than R is implemented by a combining cube reorientation and R rotation.
       const reorientation = ({
         L: '(u2)',
         U: '(f)',
@@ -75,7 +105,7 @@ export default class Cube {
         .rotate(reverseDirection(reorientation));
     }
     if (move === 'M' || move === 'S' || move === 'E') {
-      // const reorientation: Direction? = ({M: null, S: Direction.y, E: Direction.z} as {[P in 'M'|'S'|'E']: Reorientation})[move];
+      // S and E are implemented by M rotation and cube reorientation.
       const reorientation = ({
         M: '',
         S: 'y',
@@ -131,7 +161,7 @@ export default class Cube {
       return this;
     }
     if (isBasicWideRotation(move)) {
-      let rotations: Direction[] = [];
+      let rotations: NormalizedDirection[] = [];
       if (move === 'Rw') {
         rotations = ['L', '(r)'];
       } else if (move === 'Lw') {
