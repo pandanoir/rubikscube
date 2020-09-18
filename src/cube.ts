@@ -1,44 +1,13 @@
 import { copy, reverseDirection } from './utils';
 import { Direction, CubeFace, CubeType, Face, Color } from './type';
 
-const baseRotate: (transform: number[]) => (face: CubeFace) => CubeFace = (
-  transform
-) => (face) => transform.map((x) => face[x]);
+const baseRotate = (transform: number[]) => (face: CubeFace) =>
+  transform.map((x) => face[x]);
 
-const rotateRight: (face: CubeFace) => CubeFace = baseRotate([
-  6,
-  3,
-  0,
-  7,
-  4,
-  1,
-  8,
-  5,
-  2,
-]);
-const rotateLeft: (face: CubeFace) => CubeFace = baseRotate([
-  2,
-  5,
-  8,
-  1,
-  4,
-  7,
-  0,
-  3,
-  6,
-]);
-const rotateRight2: (face: CubeFace) => CubeFace = baseRotate([
-  8,
-  7,
-  6,
-  5,
-  4,
-  3,
-  2,
-  1,
-  0,
-]);
-const rotateLeft2: (face: CubeFace) => CubeFace = rotateRight2;
+const rotateRight = baseRotate([6, 3, 0, 7, 4, 1, 8, 5, 2]);
+const rotateLeft = baseRotate([2, 5, 8, 1, 4, 7, 0, 3, 6]);
+const rotateRight2 = baseRotate([8, 7, 6, 5, 4, 3, 2, 1, 0]);
+const rotateLeft2 = rotateRight2;
 
 const setBase = (face: CubeFace, basePoint: number): CubeFace => {
   // basePoint represent the index of face
