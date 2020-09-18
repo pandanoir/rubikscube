@@ -108,7 +108,7 @@ export default class Cube {
     return this;
   }
   private _rotate(direction: Direction): this {
-    const doesReverseRotate: boolean = direction.includes("'");
+    const isReverseRotation: boolean = direction.includes("'");
     const move = direction.replace(/['2]/g, '').replace(
       /\(([ruf])\)/,
       (_, a) =>
@@ -139,14 +139,14 @@ export default class Cube {
         B: '(u)',
       } as const)[move];
       return this.rotate(reorientation)
-        .rotate(doesReverseRotate ? `R'` : 'R')
+        .rotate(isReverseRotation ? `R'` : 'R')
         .rotate(rev(reorientation));
     }
     if (move === 'R') {
       // R rotation
-      this.moveColumn([2, 5, 8], doesReverseRotate);
+      this.moveColumn([2, 5, 8], isReverseRotation);
 
-      if (doesReverseRotate) {
+      if (isReverseRotation) {
         this.face.R = rotateLeft(this.face.R);
         return this;
       }
@@ -162,7 +162,7 @@ export default class Cube {
       } as const)[move];
       if (reorientation) this.rotate(reorientation);
 
-      this.moveColumn([1, 4, 7], !doesReverseRotate);
+      this.moveColumn([1, 4, 7], !isReverseRotation);
 
       if (reorientation) this.rotate(`${reorientation}'` as Direction);
       return this;
@@ -180,14 +180,14 @@ export default class Cube {
           [P in 'x' | 'y' | 'z']: Face;
         })[move];
 
-      if (doesReverseRotate) faceOrder.reverse();
+      if (isReverseRotation) faceOrder.reverse();
 
       const before = copyFace(this.face[faceOrder[0]]);
       for (let i = 0; i < 3; i++)
         this.face[faceOrder[i]] = copyFace(this.face[faceOrder[i + 1]]);
       this.face[faceOrder[3]] = before;
 
-      if (doesReverseRotate) {
+      if (isReverseRotation) {
         this.face[R] = rotateLeft(this.face[R]);
         this.face[L] = rotateRight(this.face[L]);
       } else {
@@ -195,20 +195,22 @@ export default class Cube {
         this.face[L] = rotateLeft(this.face[L]);
       }
 
-      if (move === 'y')
-        if (!doesReverseRotate) {
+      if (move === 'y') {
+        if (!isReverseRotation) {
           this.face.R = setBase(this.face.R, 8);
           this.face.B = setBase(this.face.B, 8);
         } else {
           this.face.B = setBase(this.face.B, 8);
           this.face.L = setBase(this.face.L, 8);
         }
-      if (move === 'z')
-        for (let i = 0; i < 4; i++)
+      } else if (move === 'z') {
+        for (let i = 0; i < 4; i++) {
           this.face[faceOrder[i]] = setBase(
             this.face[faceOrder[i]],
-            !doesReverseRotate ? 6 : 2
+            isReverseRotation ? 2 : 6
           );
+        }
+      }
       return this;
     }
     throw new Error('unexpected rotation letter.');
