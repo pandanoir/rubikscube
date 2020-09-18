@@ -101,7 +101,13 @@ export default class Cube {
   ) {
     this.face = face;
   }
-  rotate(direction: Direction): this {
+  rotate(..._direction: Direction[]): this {
+    for (const dir of _direction) {
+      this._rotate(dir);
+    }
+    return this;
+  }
+  private _rotate(direction: Direction): this {
     const doesReverseRotate: boolean = direction.includes("'");
     const move = direction.replace(/['2]/g, '').replace(
       /\(([ruf])\)/,
