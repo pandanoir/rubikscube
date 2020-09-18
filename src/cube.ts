@@ -1,4 +1,10 @@
-import { copy, setBase, reverseDirection, baseRotate, moveColumn } from './utils';
+import {
+  copy,
+  setBase,
+  reverseDirection,
+  baseRotate,
+  moveColumn,
+} from './utils';
 import { Direction, CubeType, Face, Color } from './type';
 
 const rotateRight = baseRotate([6, 3, 0, 7, 4, 1, 8, 5, 2]);
@@ -29,15 +35,12 @@ export default class Cube {
   }
   private _rotate(direction: Direction): this {
     const isReverseRotation = direction.includes("'");
-    const move = direction.replace(/['2]/g, '').replace(
-      /\(([ruf])\)/,
-      (_, a) =>
-        ({
-          r: 'x',
-          u: 'y',
-          f: 'z',
-        }[a as 'r' | 'u' | 'f'])
-    ) as Direction; // d.slice(0, -1) cannot remove prime from "(r')".
+    const move = direction
+      .replace(/['2]/g, '')
+      .replace(
+        /\(([ruf])\)/,
+        (_, a: 'r' | 'u' | 'f') => ({ r: 'x', u: 'y', f: 'z' }[a])
+      ) as Direction; // d.slice(0, -1) cannot remove prime from "(r')".
     if (direction.includes('2')) {
       this.rotate(move);
       this.rotate(move);
