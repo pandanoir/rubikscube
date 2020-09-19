@@ -186,7 +186,7 @@ const rotateLeft2 = rotateRight2;
 /**
  * @param basePoint: the position pointed to by this becomes the upper left position
  */
-export const setBase = (face: CubeFace, basePoint: number): CubeFace => {
+export const setBase = (face: CubeFace, basePoint: 0 | 2 | 6 | 8): CubeFace => {
   if (basePoint === 0) return copy(face);
   if (basePoint === 2) return rotateLeft(face);
   if (basePoint === 6) return rotateRight(face);
