@@ -1,6 +1,6 @@
 {
-  "name": "rubikscube",
-  "version": "0.0.1",
+  "name": "@pandanoir/rubikscube",
+  "version": "0.1.0",
   "description": "simulating Rubik's Cube in JavaScript",
   "main": "dist/cube.js",
   "types": "dist/cube.d.ts",
@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "preversion": "npm test",
-    "version": "npm run build && git add -A",
+    "version": "npm run build && git add package.json package-lock.json",
     "postversion": "git push && git push --tags",
     "test": "jest --coverage",
     "build": "webpack --progress --mode production",
