@@ -40,12 +40,12 @@ type AdvancedReorientation =
   | "(u'2)"
   | "(f'2)";
 
-type Reorientation =
+export type Reorientation =
   | BasicReorientation
   | SquaredReorientation
   | ReverseReorientation
   | AdvancedReorientation;
-type NormalizedReorientation =
+export type NormalizedReorientation =
   | BasicReorientation
   | SquaredReorientation
   | ReverseReorientation
@@ -181,13 +181,13 @@ type AdvancedRotation =
   | "D'w2"
   | "F'w2"
   | "B'w2";
-type Rotation =
+export type Rotation =
   | BasicRotation
   | SquaredRotation
   | ReverseRotation
   | WideRotation
   | AdvancedRotation;
-type NormalizedRotation =
+export type NormalizedRotation =
   | BasicRotation
   | SquaredRotation
   | ReverseRotation
