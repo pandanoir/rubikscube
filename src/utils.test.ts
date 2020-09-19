@@ -1,4 +1,4 @@
-import { reverseDirection } from './utils';
+import { normalize, reverseDirection, setBase } from './utils';
 
 describe('reverseDirection()', () => {
   it('reverses the basic rotations', () => {
@@ -65,5 +65,80 @@ describe('reverseDirection()', () => {
     expect(reverseDirection("M2'")).toBe("M2'");
     expect(reverseDirection("S2'")).toBe("S2'");
     expect(reverseDirection("E2'")).toBe("E2'");
+
+    expect(reverseDirection(`Rw'`)).toBe('Rw');
+    expect(reverseDirection('Rw2')).toBe('Rw2');
+  });
+});
+describe('normalize()', () => {
+  it('returns input as is if the input has already been normalized', () => {
+    expect(normalize(`Rw2'`)).toBe(`Rw2'`);
+    expect(normalize(`Uw2'`)).toBe(`Uw2'`);
+    expect(normalize(`M2'`)).toBe(`M2'`);
+
+    expect(normalize(`x2'`)).toBe(`x2'`);
+    expect(normalize(`y2'`)).toBe(`y2'`);
+    expect(normalize(`z2'`)).toBe(`z2'`);
+
+    expect(normalize(`(r2')`)).toBe(`(r2')`);
+    expect(normalize(`(u2')`)).toBe(`(u2')`);
+    expect(normalize(`(f2')`)).toBe(`(f2')`);
+  });
+  it('normalizes complex rotations', () => {
+    expect(normalize(`x'2`)).toBe(`x2'`);
+    expect(normalize(`y'2`)).toBe(`y2'`);
+    expect(normalize(`z'2`)).toBe(`z2'`);
+
+    expect(normalize(`(r'2)`)).toBe(`(r2')`);
+    expect(normalize(`(u'2)`)).toBe(`(u2')`);
+    expect(normalize(`(f'2)`)).toBe(`(f2')`);
+  });
+});
+describe('setBase()', () => {
+  it('', () => {
+    expect(setBase(['0', '1', '2', '3', '4', '5', '6', '7', '8'], 0)).toEqual([
+      '0',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '8',
+    ]);
+    expect(setBase(['0', '1', '2', '3', '4', '5', '6', '7', '8'], 2)).toEqual([
+      '2',
+      '5',
+      '8',
+      '1',
+      '4',
+      '7',
+      '0',
+      '3',
+      '6',
+    ]);
+    expect(setBase(['0', '1', '2', '3', '4', '5', '6', '7', '8'], 6)).toEqual([
+      '6',
+      '3',
+      '0',
+      '7',
+      '4',
+      '1',
+      '8',
+      '5',
+      '2',
+    ]);
+    expect(setBase(['0', '1', '2', '3', '4', '5', '6', '7', '8'], 8)).toEqual([
+      '8',
+      '7',
+      '6',
+      '5',
+      '4',
+      '3',
+      '2',
+      '1',
+      '0',
+    ]);
   });
 });

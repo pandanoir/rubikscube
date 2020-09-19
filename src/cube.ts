@@ -191,7 +191,7 @@ export default class Cube {
 
       return this;
     }
-    return this;
+    throw new Error('unexpected rotation was given');
   }
   /**
    * @description
