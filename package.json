@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "preversion": "npm test",
-    "version": "npm run build && gulp && git add -A",
+    "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags",
     "test": "jest --coverage",
     "build": "webpack --progress --mode production",
