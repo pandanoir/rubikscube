@@ -1,2 +1,3 @@
 # rubikscube
-simulating Rubik's Cube in JavaScript
+
+simulating Rubik's Cube in TypeScript
