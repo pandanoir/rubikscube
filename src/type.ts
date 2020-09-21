@@ -5,7 +5,7 @@ export type CubeType = {
   [key in Face]: CubeFace;
 };
 export type BasicReorientation = 'x' | 'y' | 'z' | '(r)' | '(u)' | '(f)';
-export type SquaredReorientation =
+export type BasicSquaredReorientation =
   | 'x2'
   | 'y2'
   | 'z2'
@@ -19,6 +19,14 @@ export type ReverseReorientation =
   | "(r')"
   | "(u')"
   | "(f')";
+export type SquaredReorientation =
+  | BasicSquaredReorientation
+  | "x2'"
+  | "y2'"
+  | "z2'"
+  | "(r2')"
+  | "(u2')"
+  | "(f2')";
 type NormalizedAdvancedReorientation =
   | "x2'"
   | "y2'"
@@ -42,17 +50,17 @@ type AdvancedReorientation =
 
 export type Reorientation =
   | BasicReorientation
-  | SquaredReorientation
+  | BasicSquaredReorientation
   | ReverseReorientation
   | AdvancedReorientation;
 export type NormalizedReorientation =
   | BasicReorientation
-  | SquaredReorientation
+  | BasicSquaredReorientation
   | ReverseReorientation
   | NormalizedAdvancedReorientation;
 
 export type BasicRotation = 'R' | 'L' | 'U' | 'D' | 'F' | 'B' | 'M' | 'S' | 'E';
-export type SquaredRotation =
+export type BasicSquaredRotation =
   | 'R2'
   | 'L2'
   | 'U2'
@@ -74,6 +82,29 @@ export type ReverseRotation =
   | "E'";
 export type WideRotation = 'Rw' | 'Lw' | 'Uw' | 'Dw' | 'Fw' | 'Bw';
 
+export type SquaredRotation =
+  | BasicSquaredRotation
+  | 'Rw2'
+  | 'Lw2'
+  | 'Uw2'
+  | 'Dw2'
+  | 'Fw2'
+  | 'Bw2'
+  | "R2'"
+  | "L2'"
+  | "U2'"
+  | "D2'"
+  | "F2'"
+  | "B2'"
+  | "M2'"
+  | "S2'"
+  | "E2'"
+  | "Rw2'"
+  | "Lw2'"
+  | "Uw2'"
+  | "Dw2'"
+  | "Fw2'"
+  | "Bw2'";
 type NormalizedAdvancedRotation =
   | 'Rw2'
   | 'Lw2'
@@ -183,13 +214,13 @@ type AdvancedRotation =
   | "B'w2";
 export type Rotation =
   | BasicRotation
-  | SquaredRotation
+  | BasicSquaredRotation
   | ReverseRotation
   | WideRotation
   | AdvancedRotation;
 export type NormalizedRotation =
   | BasicRotation
-  | SquaredRotation
+  | BasicSquaredRotation
   | ReverseRotation
   | WideRotation
   | NormalizedAdvancedRotation;

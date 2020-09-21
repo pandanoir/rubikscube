@@ -4,32 +4,38 @@ import {
   Direction,
   BasicRotation,
   NormalizedDirection,
-  SquaredRotation,
+  BasicSquaredRotation,
   ReverseRotation,
   BasicReorientation,
-  SquaredReorientation,
+  BasicSquaredReorientation,
   ReverseReorientation,
   WideRotation,
+  SquaredRotation,
+  SquaredReorientation,
 } from './type';
 
 const isBasicRotation = (dir: Direction): dir is BasicRotation =>
   ['R', 'L', 'U', 'D', 'F', 'B', 'M', 'S', 'E'].includes(dir);
-const isBasicSquaredRotation = (dir: Direction): dir is SquaredRotation =>
+const isBasicSquaredRotation = (dir: Direction): dir is BasicSquaredRotation =>
   ['R2', 'L2', 'U2', 'D2', 'F2', 'B2', 'M2', 'S2', 'E2'].includes(dir);
 const isBasicReverseRotation = (dir: Direction): dir is ReverseRotation =>
   ["R'", "L'", "U'", "D'", "F'", "B'", "M'", "S'", "E'"].includes(dir);
 export const isBasicWideRotation = (dir: Direction): dir is WideRotation =>
   ['Rw', 'Lw', 'Uw', 'Dw', 'Fw', 'Bw'].includes(dir);
+const isSquaredRotation = (dir: Direction): dir is SquaredRotation =>
+  dir.includes('2');
 const isBasicReorientation = (dir: Direction): dir is BasicReorientation =>
   ['x', 'y', 'z', '(r)', '(u)', '(f)'].includes(dir);
 const isBasicSquaredReorientation = (
   dir: Direction
-): dir is SquaredReorientation =>
+): dir is BasicSquaredReorientation =>
   ['x2', 'y2', 'z2', '(r2)', '(u2)', '(f2)'].includes(dir);
 const isBasicReverseReorientation = (
   dir: Direction
 ): dir is ReverseReorientation =>
   ["x'", "y'", "z'", "(r')", "(u')", "(f')"].includes(dir);
+const isSquaredReorientation = (dir: Direction): dir is SquaredReorientation =>
+  dir.includes('2');
 /**
  * @description
  * normalize the move notation.
@@ -38,26 +44,17 @@ const isBasicReverseReorientation = (
 export const normalize = (dir: Direction): NormalizedDirection => {
   if (dir === '') return '';
   if (isBasicRotation(dir)) return dir;
-  if (isBasicSquaredRotation(dir)) return dir;
+  if (isSquaredRotation(dir)) return dir;
   if (isBasicReverseRotation(dir)) return dir;
   if (isBasicWideRotation(dir)) return dir;
 
   if (isBasicReorientation(dir)) return dir;
-  if (isBasicSquaredReorientation(dir)) return dir;
+  if (isSquaredReorientation(dir)) return dir;
   if (isBasicReverseReorientation(dir)) return dir;
   if (dir === "x'2" || dir === "y'2" || dir === "z'2")
     return `${dir[0]}2'` as NormalizedDirection;
   if (dir === "(r'2)" || dir === "(u'2)" || dir === "(f'2)")
     return `(${dir[1]}2')` as NormalizedDirection;
-  if (
-    dir === "x2'" ||
-    dir === "y2'" ||
-    dir === "z2'" ||
-    dir === "(r2')" ||
-    dir === "(u2')" ||
-    dir === "(f2')"
-  )
-    return dir;
 
   // advanced rotations
   let res = dir[0];
@@ -71,13 +68,12 @@ export const reverseDirection = (
   dir: NormalizedDirection
 ): NormalizedDirection => {
   if (dir === '') return '';
+  if (isSquaredRotation(dir) || isSquaredReorientation(dir)) return dir;
   // basic rotations
   if (isBasicRotation(dir) || isBasicWideRotation(dir))
     return `${dir}'` as NormalizedDirection;
   if (isBasicReverseRotation(dir)) return dir.replace(/'/, '') as BasicRotation;
-  if (isBasicSquaredRotation(dir)) return dir;
 
-  if (isBasicSquaredReorientation(dir)) return dir;
   if (isBasicReverseReorientation(dir))
     return dir.replace(/'/, '') as BasicReorientation;
 
@@ -90,7 +86,6 @@ export const reverseDirection = (
   if (dir === '(f)') return "(f')";
 
   // advanced rotations
-  if (dir.includes('2')) return dir;
   if (dir.includes("'")) return dir.replace(/'/, '') as NormalizedDirection;
   return `${dir}'` as NormalizedDirection;
 };
