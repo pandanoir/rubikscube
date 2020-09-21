@@ -74,6 +74,7 @@ export default class Cube {
     return this;
   }
   private _rotate(direction: NormalizedDirection): this {
+    if (direction === '') return this;
     const isReverseRotation = direction.includes("'");
     const move = direction
       .replace(/['2]/g, '')
@@ -82,8 +83,8 @@ export default class Cube {
         (_, a: 'r' | 'u' | 'f') => ({ r: 'x', u: 'y', f: 'z' }[a])
       ) as BasicRotation | 'x' | 'y' | 'z' | WideRotation;
     if (direction.includes('2')) {
-      this.rotate(move);
-      this.rotate(move);
+      this._rotate(move);
+      this._rotate(move);
       return this;
     }
     if (move === 'R') {
@@ -109,9 +110,9 @@ export default class Cube {
         F: `(u')`,
         B: '(u)',
       } as const)[move];
-      return this.rotate(reorientation)
-        .rotate(isReverseRotation ? `R'` : 'R')
-        .rotate(reverseDirection(reorientation));
+      return this._rotate(reorientation)
+        ._rotate(isReverseRotation ? `R'` : 'R')
+        ._rotate(reverseDirection(reorientation));
     }
     if (move === 'M' || move === 'S' || move === 'E') {
       // S and E are implemented by M rotation and cube reorientation.
@@ -120,9 +121,9 @@ export default class Cube {
         S: 'y',
         E: 'z',
       } as const)[move];
-      this.rotate(reorientation);
+      this._rotate(reorientation);
       this.face = moveColumn(this.face, [1, 4, 7], !isReverseRotation);
-      this.rotate(reverseDirection(reorientation));
+      this._rotate(reverseDirection(reorientation));
       return this;
     }
     if (move === 'x' || move === 'y' || move === 'z') {
