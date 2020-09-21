@@ -153,13 +153,12 @@ export const reverseDirection = (
   // basic rotations
   if (isBasicRotation(dir) || isBasicWideRotation(dir))
     return `${dir}'` as NormalizedDirection;
-  if (isBasicReverseRotation(dir))
-    return dir.replace(/'/, '') as NormalizedDirection;
+  if (isBasicReverseRotation(dir)) return dir.replace(/'/, '') as BasicRotation;
   if (isBasicSquaredRotation(dir)) return dir;
 
   if (isBasicSquaredReorientation(dir)) return dir;
   if (isBasicReverseReorientation(dir))
-    return dir.replace(/'/, '') as NormalizedDirection;
+    return dir.replace(/'/, '') as BasicReorientation;
 
   if (dir === 'x') return `x'`;
   if (dir === 'y') return `y'`;
