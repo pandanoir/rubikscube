@@ -7,7 +7,6 @@ import {
   BasicSquaredRotation,
   ReverseRotation,
   BasicReorientation,
-  BasicSquaredReorientation,
   ReverseReorientation,
   WideRotation,
   SquaredRotation,
@@ -26,16 +25,12 @@ const isSquaredRotation = (dir: Direction): dir is SquaredRotation =>
   dir.includes('2');
 const isBasicReorientation = (dir: Direction): dir is BasicReorientation =>
   ['x', 'y', 'z', '(r)', '(u)', '(f)'].includes(dir);
-const isBasicSquaredReorientation = (
-  dir: Direction
-): dir is BasicSquaredReorientation =>
+const isSquaredReorientation = (dir: Direction): dir is SquaredReorientation =>
   ['x2', 'y2', 'z2', '(r2)', '(u2)', '(f2)'].includes(dir);
 const isBasicReverseReorientation = (
   dir: Direction
 ): dir is ReverseReorientation =>
   ["x'", "y'", "z'", "(r')", "(u')", "(f')"].includes(dir);
-const isSquaredReorientation = (dir: Direction): dir is SquaredReorientation =>
-  dir.includes('2');
 /**
  * @description
  * normalize the move notation.
@@ -44,23 +39,37 @@ const isSquaredReorientation = (dir: Direction): dir is SquaredReorientation =>
 export const normalize = (dir: Direction): NormalizedDirection => {
   if (dir === '') return '';
   if (isBasicRotation(dir)) return dir;
-  if (isSquaredRotation(dir)) return dir;
+  if (isBasicSquaredRotation(dir)) return dir;
   if (isBasicReverseRotation(dir)) return dir;
   if (isBasicWideRotation(dir)) return dir;
 
   if (isBasicReorientation(dir)) return dir;
   if (isSquaredReorientation(dir)) return dir;
   if (isBasicReverseReorientation(dir)) return dir;
-  if (dir === "x'2" || dir === "y'2" || dir === "z'2")
-    return `${dir[0]}2'` as NormalizedDirection;
-  if (dir === "(r'2)" || dir === "(u'2)" || dir === "(f'2)")
-    return `(${dir[1]}2')` as NormalizedDirection;
+  if (
+    dir === "x2'" ||
+    dir === "y2'" ||
+    dir === "z2'" ||
+    dir === "x'2" ||
+    dir === "y'2" ||
+    dir === "z'2"
+  )
+    return `${dir[0]}2` as SquaredReorientation;
+  if (
+    dir === "(r2')" ||
+    dir === "(u2')" ||
+    dir === "(f2')" ||
+    dir === "(r'2)" ||
+    dir === "(u'2)" ||
+    dir === "(f'2)"
+  )
+    return `(${dir[1]}2)` as SquaredReorientation;
 
   // advanced rotations
   let res = dir[0];
   if (dir.includes('w')) res += 'w';
   if (dir.includes('2')) res += '2';
-  if (dir.includes("'")) res += "'";
+  else if (dir.includes("'")) res += "'";
   return res as NormalizedDirection;
 };
 export const copy = <T>(arr: T[]): T[] => arr.concat();

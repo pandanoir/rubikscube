@@ -51,20 +51,20 @@ describe('reverseDirection()', () => {
     expect(reverseDirection('B2')).toBe('B2');
     expect(reverseDirection('F2')).toBe('F2');
 
-    expect(reverseDirection("R2'")).toBe("R2'");
-    expect(reverseDirection("L2'")).toBe("L2'");
-    expect(reverseDirection("U2'")).toBe("U2'");
-    expect(reverseDirection("D2'")).toBe("D2'");
-    expect(reverseDirection("B2'")).toBe("B2'");
-    expect(reverseDirection("F2'")).toBe("F2'");
+    expect(reverseDirection('R2')).toBe('R2');
+    expect(reverseDirection('L2')).toBe('L2');
+    expect(reverseDirection('U2')).toBe('U2');
+    expect(reverseDirection('D2')).toBe('D2');
+    expect(reverseDirection('B2')).toBe('B2');
+    expect(reverseDirection('F2')).toBe('F2');
 
     expect(reverseDirection('M2')).toBe('M2');
     expect(reverseDirection('S2')).toBe('S2');
     expect(reverseDirection('E2')).toBe('E2');
 
-    expect(reverseDirection("M2'")).toBe("M2'");
-    expect(reverseDirection("S2'")).toBe("S2'");
-    expect(reverseDirection("E2'")).toBe("E2'");
+    expect(reverseDirection('M2')).toBe('M2');
+    expect(reverseDirection('S2')).toBe('S2');
+    expect(reverseDirection('E2')).toBe('E2');
 
     expect(reverseDirection(`Rw'`)).toBe('Rw');
     expect(reverseDirection('Rw2')).toBe('Rw2');
@@ -72,26 +72,30 @@ describe('reverseDirection()', () => {
 });
 describe('normalize()', () => {
   it('returns input as is if the input has already been normalized', () => {
-    expect(normalize(`Rw2'`)).toBe(`Rw2'`);
-    expect(normalize(`Uw2'`)).toBe(`Uw2'`);
-    expect(normalize(`M2'`)).toBe(`M2'`);
+    expect(normalize(`Rw2`)).toBe(`Rw2`);
+    expect(normalize(`Uw2`)).toBe(`Uw2`);
+    expect(normalize(`M2`)).toBe(`M2`);
 
-    expect(normalize(`x2'`)).toBe(`x2'`);
-    expect(normalize(`y2'`)).toBe(`y2'`);
-    expect(normalize(`z2'`)).toBe(`z2'`);
+    expect(normalize(`x2`)).toBe(`x2`);
+    expect(normalize(`y2`)).toBe(`y2`);
+    expect(normalize(`z2`)).toBe(`z2`);
 
-    expect(normalize(`(r2')`)).toBe(`(r2')`);
-    expect(normalize(`(u2')`)).toBe(`(u2')`);
-    expect(normalize(`(f2')`)).toBe(`(f2')`);
+    expect(normalize(`(r2)`)).toBe(`(r2)`);
+    expect(normalize(`(u2)`)).toBe(`(u2)`);
+    expect(normalize(`(f2)`)).toBe(`(f2)`);
   });
   it('normalizes complex rotations', () => {
-    expect(normalize(`x'2`)).toBe(`x2'`);
-    expect(normalize(`y'2`)).toBe(`y2'`);
-    expect(normalize(`z'2`)).toBe(`z2'`);
+    expect(normalize(`R2'w`)).toBe(`Rw2`);
+    expect(normalize(`U2'w`)).toBe(`Uw2`);
+    expect(normalize(`M'2`)).toBe(`M2`);
 
-    expect(normalize(`(r'2)`)).toBe(`(r2')`);
-    expect(normalize(`(u'2)`)).toBe(`(u2')`);
-    expect(normalize(`(f'2)`)).toBe(`(f2')`);
+    expect(normalize(`x'2`)).toBe(`x2`);
+    expect(normalize(`y'2`)).toBe(`y2`);
+    expect(normalize(`z'2`)).toBe(`z2`);
+
+    expect(normalize(`(r'2)`)).toBe(`(r2)`);
+    expect(normalize(`(u'2)`)).toBe(`(u2)`);
+    expect(normalize(`(f'2)`)).toBe(`(f2)`);
   });
 });
 describe('setBase()', () => {
