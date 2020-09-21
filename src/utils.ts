@@ -12,103 +12,24 @@ import {
   WideRotation,
 } from './type';
 
-const isBasicRotation = (dir: Direction): dir is BasicRotation => {
-  if (
-    dir === 'R' ||
-    dir === 'L' ||
-    dir === 'U' ||
-    dir === 'D' ||
-    dir === 'F' ||
-    dir === 'B' ||
-    dir === 'M' ||
-    dir === 'S' ||
-    dir === 'E'
-  )
-    return true;
-  return false;
-};
-const isBasicSquaredRotation = (dir: Direction): dir is SquaredRotation => {
-  if (
-    dir === 'R2' ||
-    dir === 'L2' ||
-    dir === 'U2' ||
-    dir === 'D2' ||
-    dir === 'F2' ||
-    dir === 'B2' ||
-    dir === 'M2' ||
-    dir === 'S2' ||
-    dir === 'E2'
-  )
-    return true;
-  return false;
-};
-const isBasicReverseRotation = (dir: Direction): dir is ReverseRotation => {
-  if (
-    dir === "R'" ||
-    dir === "L'" ||
-    dir === "U'" ||
-    dir === "D'" ||
-    dir === "F'" ||
-    dir === "B'" ||
-    dir === "M'" ||
-    dir === "S'" ||
-    dir === "E'"
-  )
-    return true;
-  return false;
-};
-export const isBasicWideRotation = (dir: Direction): dir is WideRotation => {
-  if (
-    dir === 'Rw' ||
-    dir === 'Lw' ||
-    dir === 'Uw' ||
-    dir === 'Dw' ||
-    dir === 'Fw' ||
-    dir === 'Bw'
-  )
-    return true;
-  return false;
-};
-const isBasicReorientation = (dir: Direction): dir is BasicReorientation => {
-  if (
-    dir === 'x' ||
-    dir === 'y' ||
-    dir === 'z' ||
-    dir === '(r)' ||
-    dir === '(u)' ||
-    dir === '(f)'
-  )
-    return true;
-  return false;
-};
+const isBasicRotation = (dir: Direction): dir is BasicRotation =>
+  ['R', 'L', 'U', 'D', 'F', 'B', 'M', 'S', 'E'].includes(dir);
+const isBasicSquaredRotation = (dir: Direction): dir is SquaredRotation =>
+  ['R2', 'L2', 'U2', 'D2', 'F2', 'B2', 'M2', 'S2', 'E2'].includes(dir);
+const isBasicReverseRotation = (dir: Direction): dir is ReverseRotation =>
+  ["R'", "L'", "U'", "D'", "F'", "B'", "M'", "S'", "E'"].includes(dir);
+export const isBasicWideRotation = (dir: Direction): dir is WideRotation =>
+  ['Rw', 'Lw', 'Uw', 'Dw', 'Fw', 'Bw'].includes(dir);
+const isBasicReorientation = (dir: Direction): dir is BasicReorientation =>
+  ['x', 'y', 'z', '(r)', '(u)', '(f)'].includes(dir);
 const isBasicSquaredReorientation = (
   dir: Direction
-): dir is SquaredReorientation => {
-  if (
-    dir === 'x2' ||
-    dir === 'y2' ||
-    dir === 'z2' ||
-    dir === '(r2)' ||
-    dir === '(u2)' ||
-    dir === '(f2)'
-  )
-    return true;
-  return false;
-};
+): dir is SquaredReorientation =>
+  ['x2', 'y2', 'z2', '(r2)', '(u2)', '(f2)'].includes(dir);
 const isBasicReverseReorientation = (
   dir: Direction
-): dir is ReverseReorientation => {
-  if (
-    dir === "x'" ||
-    dir === "y'" ||
-    dir === "z'" ||
-    dir === "(r')" ||
-    dir === "(u')" ||
-    dir === "(f')"
-  )
-    return true;
-  return false;
-};
+): dir is ReverseReorientation =>
+  ["x'", "y'", "z'", "(r')", "(u')", "(f')"].includes(dir);
 /**
  * @description
  * normalize the move notation.
