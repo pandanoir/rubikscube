@@ -1,9 +1,9 @@
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: require('path').resolve(__dirname, './src/cube.ts'),
+  entry: require('path').resolve(__dirname, '../src/cube.ts'),
   output: {
     filename: 'cube.js',
-    path: require('path').resolve(__dirname, './dist'),
+    path: require('path').resolve(__dirname, '../dist'),
     library: 'Cube',
     libraryExport: 'default',
     libraryTarget: 'umd',
@@ -16,7 +16,12 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: {
+          loader: 'ts-loader',
+          options: {
+            configFile: require('path').resolve(__dirname, './tsconfig.json'),
+          }
+        }
       },
     ],
   },

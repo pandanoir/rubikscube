@@ -26,13 +26,13 @@ module.exports = {
       plugins: ['prettier', '@typescript-eslint'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: './tsconfig.json',
+        project: './config/tsconfig.json',
       },
     },
     {
       files: ['*.test.ts'],
       parserOptions: {
-        project: './tsconfig.spec.json',
+        project: './config/tsconfig.test.json',
       },
     },
   ],

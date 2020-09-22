@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "target": "ES5",
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "../dist",
+    "typeRoots": ["../node_modules/@types"]
+  },
+  "include": ["../src"],
+  "exclude": ["../src/**/*.test.ts"]
+}

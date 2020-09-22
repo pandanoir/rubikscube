@@ -15,10 +15,13 @@
     "preversion": "npm test",
     "version": "npm run build && git add package.json package-lock.json",
     "postversion": "git push && git push --tags",
-    "test": "jest --coverage",
-    "build": "webpack --progress --mode production",
-    "build:dev": "webpack --progress",
-    "watch": "webpack --watch"
+    "test": "jest --coverage -c config/jest.config.js",
+    "build": "webpack --progress --mode production --config config/webpack.config.js",
+    "build:dev": "webpack --progress --config config/webpack.config.js",
+    "watch": "webpack --watch --config config/webpack.config.js"
+  },
+  "eslintConfig": {
+    "extends": "./config/eslintrc.js"
   },
   "repository": {
     "type": "git",
