@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<style>
+body {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.dice {
+  position: relative;
+  top: 30px;
+  left: 30px;
+  width:100px;
+  height:100px;
+  transform-style: preserve-3d;
+  margin: 0 auto;
+}
+.face {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  background: #000;
+}
+#face1 { /* U */ transform: rotateX(90deg) translateZ(50px); }
+#face2 { /* L */ transform: rotateY(-90deg) translateZ(50px); }
+#face3 { /* F */ transform: translateZ(50px); }
+#face4 { /* R */ transform: rotateY(90deg) translateZ(50px); }
+#face5 { /* B */ transform: rotateX(180deg) translateZ(50px); }
+#face6 { /* D */ transform: rotateX(-90deg) translateZ(50px); }
+.center-cube { border-radius: 5px; }
+.edge-1-cube { border-radius: 0 0 5px 5px; }
+.edge-2-cube { border-radius: 0 5px 5px 0; }
+.edge-3-cube { border-radius: 5px 0 0 5px; }
+.edge-4-cube { border-radius: 5px 5px 0 0; }
+.cube-W {background: #fff}
+.cube-R {background: #f00}
+.cube-B {background: #44f}
+.cube-G {background: #3e3}
+.cube-O {background: #f93}
+.cube-Y {background: #ff0}
+label { user-select: none; }
+[v-cloak] { display: none; }
+</style>
+<script src="https://unpkg.com/vue@3.0.0/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/@pandanoir/rubikscube@0.1.0/dist/cube.js"></script>
+
+
+<div id="app" v-cloak>
+  <div style="height: 300px;" @mousedown.prevent="mousedown" @mousemove.prevent @mouseup.prevent @mouseleave.prevent>
+    <div class="dice" :style="`transform: matrix3d(${matrix.map(row=>row.join(',')).join(',')})`" @mouseleave.prevent>
+      <div class="face" v-for="(val, i) in ['U', 'L', 'F', 'R', 'B', 'D']" :id="`face${i+1}`">
+        <span
+          v-for="j in 9"
+          :class="`cube cube-${['W', 'G', 'R', 'B', 'O', 'Y'][Math.floor(Number(face[val][j-1])/9)]} ${getPosition(j-1)}-cube`"
+        >
+          {{face[val][j-1]}}
+        </span>
+
+      </div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <button v-for="rotation in rotations" @click="rotate(rotation)">{{rotation}}</button>
+      <button
+        @click="rotate('R', 'U', `R'`, `F'`,'R', 'U', `R'`, `U'`, `R'`, 'F', 'R2', `U'`, `R'`, `U'`)"
+      >
+        J-perm b
+      </button>
+    </div>
+    <div>
+      <label><input type="checkbox" v-model="wide">wide</label><br>
+      <label><input type="checkbox" v-model="square">square</label><br>
+      <label><input type="checkbox" v-model="reverse">reverse</label><br>
+    </div>
+  </div>
+</div>
+<script src="./index.js"></script>
